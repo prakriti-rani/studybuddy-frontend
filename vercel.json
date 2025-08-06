@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "buildCommand": "npm ci && npm run build",
-  "outputDirectory": "dist",
-  "installCommand": "npm ci",
   "framework": "vite",
-  "nodejs": "18.x"
+  "outputDirectory": "dist",
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
