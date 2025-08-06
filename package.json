@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "vercel-build": "vite build",
+    "build": "npx --yes vite@latest build",
+    "vercel-build": "npx --yes vite@latest build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
