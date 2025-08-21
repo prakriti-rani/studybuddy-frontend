@@ -4,6 +4,9 @@ import { BookOpen, CheckSquare, Upload, Loader, MessageCircle } from "lucide-rea
 import { useAuth } from "@clerk/clerk-react";
 import ReactMarkdown from "react-markdown";
 
+// API Configuration
+const AI_SERVER_URL = import.meta.env.VITE_AI_SERVER_URL || "http://127.0.0.1:5000";
+
 function Aiapp() {
   const { getToken } = useAuth();
   const [file, setFile] = useState(null);
@@ -31,12 +34,12 @@ function Aiapp() {
     const checkServerStatus = async () => {
       try {
         console.log("Checking server status...");
-        const response = await axios.get("http://127.0.0.1:5000/");
+        const response = await axios.get(`${AI_SERVER_URL}/`);
         console.log("AI Server is running:", response.data);
         setSummaryData("✅ AI Server is connected and ready!");
       } catch (error) {
         console.error("AI Server connection failed:", error);
-        setSummaryData("❌ AI Server is not running. Please start the Flask server on port 5000.\n\nTo start the server:\n1. Open terminal in ai_server folder\n2. Run: python flask_server.py");
+        setSummaryData(`❌ AI Server is not running. Cannot connect to ${AI_SERVER_URL}.\n\nPlease check if the AI server is deployed and running.`);
       }
     };
     
@@ -131,7 +134,7 @@ function Aiapp() {
       console.log("Uploading file to AI server (without auth for testing)...");
       
       const response = await axios.post(
-        "http://127.0.0.1:5000/upload",
+        `${AI_SERVER_URL}/upload`,
         formData,
         {
           headers: {
@@ -188,7 +191,7 @@ function Aiapp() {
       // Temporarily remove authorization for testing
       console.log("Making request to summary endpoint (without auth for testing)...");
       
-      const response = await axios.post("http://127.0.0.1:5000/summary", null, {
+      const response = await axios.post(`${AI_SERVER_URL}/summary`, null, {
         headers: {
           // Removed Authorization header for testing
         },
@@ -236,7 +239,7 @@ function Aiapp() {
       const token = await getToken();
       console.log("Generating flashcards...");
       const response = await axios.post(
-        "http://127.0.0.1:5000/flashcards",
+        `${AI_SERVER_URL}/flashcards`,
         null,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -305,7 +308,7 @@ function Aiapp() {
     setIsChatLoading(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:5000/chat", {
+      const response = await axios.post(`${AI_SERVER_URL}/chat`, {
         message: userMessage.content
       });
 
